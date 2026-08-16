@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#fafaf7">
+<title>Garden Gym</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fafaf7; --ink:#191b1e; --mut:#8a8d92; --line:#e4e2db; --go:#4e7d18;
+  --disp:'Barlow Condensed','Arial Narrow',sans-serif;
+  --body:'Barlow',-apple-system,'Segoe UI',sans-serif;
+  --num:ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5;
+  min-height:100vh;font-size:16px}
+.screen{max-width:560px;margin:0 auto;padding:28px 22px 140px;display:none}
+.screen.on{display:block}
+
+/* type */
+.small{font-family:var(--num);font-size:.72rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--mut)}
+.big{font-family:var(--disp);font-weight:700;font-size:2.4rem;line-height:1;
+  text-transform:uppercase;margin:6px 0 4px}
+.target{color:var(--mut);font-size:.95rem}
+hr{border:none;border-top:1px solid var(--line);margin:20px 0}
+
+/* buttons */
+.primary{display:block;width:100%;padding:18px;margin-top:14px;cursor:pointer;
+  font-family:var(--disp);font-weight:700;font-size:1.3rem;text-transform:uppercase;
+  letter-spacing:.03em;background:var(--ink);color:var(--bg);border:none;border-radius:12px}
+.quiet{display:block;width:100%;text-align:center;margin-top:16px;cursor:pointer;
+  background:none;border:none;color:var(--mut);font-size:.9rem;
+  text-decoration:underline;text-underline-offset:3px}
+button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{
+  outline:2px solid var(--go);outline-offset:3px}
+
+/* home */
+.datechip{margin-top:40px}
+.suggestline{color:var(--mut);font-size:.95rem;margin-top:10px}
+.footerlinks{position:fixed;bottom:0;left:0;right:0;
+  padding:16px 22px calc(16px + env(safe-area-inset-bottom));
+  display:flex;justify-content:center;gap:28px;background:var(--bg)}
+.footerlinks button{background:none;border:none;color:var(--mut);cursor:pointer;
+  font-family:var(--num);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+
+/* progress dots */
+.dots{display:flex;gap:6px;margin-bottom:26px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--line)}
+.dots i.hit{background:var(--ink)}
+
+/* checklist */
+.check{display:flex;align-items:flex-start;gap:12px;padding:13px 0;
+  border-bottom:1px solid var(--line);font-size:1rem}
+.check input{width:22px;height:22px;accent-color:var(--go);flex:none;margin-top:2px}
+.check label{cursor:pointer}
+.ct{display:flex;flex-direction:column;gap:2px}
+.cd{font-size:.83rem;color:var(--mut);line-height:1.45}
+
+/* set rows */
+.sets{margin-top:22px}
+.set{display:grid;grid-template-columns:1fr auto 1fr auto;gap:12px;align-items:end;
+  padding:10px 0}
+.set .f{display:flex;flex-direction:column;gap:2px}
+.set label{font-family:var(--num);font-size:.62rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--mut)}
+.set input{width:100%;border:none;border-bottom:1.5px solid var(--line);
+  background:none;font-family:var(--num);font-size:1.5rem;padding:2px 0;
+  color:var(--ink);border-radius:0;text-align:center}
+.set input:focus{border-bottom-color:var(--ink);outline:none}
+.set .x{font-family:var(--num);color:var(--mut);padding-bottom:8px}
+.tick{width:50px;height:50px;border-radius:50%;border:1.5px solid var(--ink);
+  background:none;color:var(--ink);font-size:1.15rem;cursor:pointer;flex:none}
+.tick.done{background:var(--go);border-color:var(--go);color:#fff}
+.lastline{font-family:var(--num);font-size:.78rem;color:var(--mut);margin-top:14px}
+.nudge{margin-top:14px;font-size:.92rem;border-left:2px solid var(--go);
+  padding:2px 0 2px 12px}
+.nudge.easy-off{border-left-color:var(--mut);color:var(--mut)}
+
+/* how-to */
+details{margin-top:22px}
+summary{cursor:pointer;list-style:none;color:var(--mut);font-size:.9rem;
+  text-decoration:underline;text-underline-offset:3px;display:inline-block}
+summary::-webkit-details-marker{display:none}
+.steps{list-style:none;margin:14px 0 4px;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:12px;margin-bottom:10px;font-size:.95rem}
+.steps li::before{content:counter(s);font-family:var(--num);font-size:.72rem;
+  color:var(--mut);margin-top:3px}
+.hint{font-size:.9rem;margin:10px 0;padding-left:12px;border-left:2px solid var(--line)}
+.hint.stop{border-left-color:#a83226}
+.vlink{display:inline-block;margin-top:8px;color:var(--ink);font-size:.9rem;
+  text-underline-offset:3px}
+
+/* nav row */
+.navrow{display:flex;gap:12px;margin-top:30px}
+.navrow .back{flex:0 0 auto;width:64px;padding:18px 0;background:none;
+  border:1.5px solid var(--line);border-radius:12px;font-size:1.1rem;cursor:pointer;color:var(--mut)}
+.navrow .primary{flex:1;margin-top:0}
+
+/* check-in */
+.feels{display:flex;flex-direction:column;gap:12px;margin-top:26px}
+.feel{padding:20px;border:1.5px solid var(--line);border-radius:12px;background:none;
+  font-family:var(--disp);font-weight:700;font-size:1.3rem;text-transform:uppercase;
+  cursor:pointer;color:var(--ink)}
+.feel small{display:block;font-family:var(--body);font-weight:400;font-size:.85rem;
+  text-transform:none;color:var(--mut);margin-top:2px}
+
+/* history */
+.hitem{padding:14px 0;border-bottom:1px solid var(--line)}
+.hitem b{font-family:var(--disp);font-weight:700;text-transform:uppercase;font-size:1.05rem}
+.hlines{font-family:var(--num);font-size:.75rem;color:var(--mut);margin-top:4px;line-height:1.8}
+.empty{color:var(--mut);padding:30px 0;text-align:center}
+
+/* guide */
+.gblock{margin-bottom:26px}
+.gblock h3{font-family:var(--disp);font-weight:700;text-transform:uppercase;
+  font-size:1.1rem;margin-bottom:6px}
+.gblock p{font-size:.95rem;margin-bottom:8px}
+.gblock a{color:var(--ink);text-underline-offset:3px}
+
+/* rest timer */
+#rest{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:var(--bg);
+  display:none;cursor:pointer;padding:16px 22px calc(16px + env(safe-area-inset-bottom))}
+#rest.on{display:block}
+#rest .inner{max-width:560px;margin:0 auto;display:flex;align-items:baseline;
+  justify-content:space-between}
+#rest .clock{font-family:var(--num);font-size:1.8rem}
+#rest .lbl{font-family:var(--num);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;opacity:.6}
+#rest .line{height:2px;background:rgba(250,250,247,.25);margin-top:10px}
+#rest .line i{display:block;height:100%;background:var(--bg);width:100%;transition:width 1s linear}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:70;
+  background:var(--ink);color:var(--bg);padding:9px 18px;border-radius:999px;
+  font-size:.88rem;display:none}
+.toast.on{display:block}
+@media (prefers-reduced-motion: reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<section class="screen on" id="s-home">
+  <div class="datechip small" id="homeDate"></div>
+  <div class="big" style="font-size:3rem">Garden<br>Gym</div>
+  <div class="suggestline" id="homeSuggest"></div>
+  <button class="primary" id="startMain"></button>
+  <button class="quiet" id="startAlt"></button>
+  <div class="footerlinks">
+    <button onclick="go('hist')">History</button>
+    <button onclick="go('guide')">Guide</button>
+  </div>
+</section>
+
+<!-- WARM-UP -->
+<section class="screen" id="s-warm">
+  <div class="small" id="warmLabel"></div>
+  <div class="big">Warm-up</div>
+  <div class="target">Five minutes. Tick as you go.</div>
+  <div id="warmList" style="margin-top:14px"></div>
+  <div id="warmNote" class="cd" style="margin-top:14px">Filming today? Start the Camera Hub recording now, then tap Begin &mdash; the app stamps every set with its time so the video processes itself.</div>
+  <div class="navrow">
+    <button class="back" onclick="go('home')" aria-label="Back">&larr;</button>
+    <button class="primary" onclick="startExercises()">Begin</button>
+  </div>
+</section>
+
+<!-- EXERCISE -->
+<section class="screen" id="s-ex"></section>
+
+<!-- CHECK-IN -->
+<section class="screen" id="s-feel">
+  <div class="small">One last thing</div>
+  <div class="big">How did<br>that feel?</div>
+  <div class="feels">
+    <button class="feel" onclick="saveSession('easy')">Easy<small>Had plenty left in the tank</small></button>
+    <button class="feel" onclick="saveSession('right')">About right<small>Worked hard, form held</small></button>
+    <button class="feel" onclick="saveSession('much')">Too much<small>Struggled or form broke down</small></button>
+  </div>
+</section>
+
+<!-- DONE -->
+<section class="screen" id="s-done">
+  <div class="small" id="doneDate"></div>
+  <div class="big">Done.</div>
+  <div class="target" id="doneLine"></div>
+  <button class="primary" onclick="go('home')">Home</button>
+</section>
+
+<!-- HISTORY -->
+<section class="screen" id="s-hist">
+  <div class="small">Your log</div>
+  <div class="big">History</div>
+  <div id="histList"></div>
+  <button class="quiet" onclick="exportCSV()">Copy log as CSV</button>
+  <button class="quiet" onclick="clearLog()">Clear all data</button>
+  <button class="primary" onclick="go('home')">Home</button>
+</section>
+
+<!-- GUIDE -->
+<section class="screen" id="s-guide">
+  <div class="small">Read once</div>
+  <div class="big">Guide</div>
+  <div style="margin-top:20px">
+    <div class="gblock"><h3>The week</h3>
+      <p>Mon / Wed / Fri, alternating: A-B-A one week, B-A-B the next. The home screen keeps track and suggests the right one.</p>
+      <p>Optional fourth day: 6 rounds of 30 seconds hard / 90 seconds easy on the spin bike.</p></div>
+    <div class="gblock"><h3>Effort</h3>
+      <p>End every set feeling like you had 1&ndash;2 clean reps left. Finish fresh &mdash; too light. Form broke &mdash; too heavy. The set ends when form breaks, not when the number says so.</p></div>
+    <div class="gblock"><h3>The volume target</h3>
+      <p>The research benchmark from the Nippard videos: <strong>about ten hard sets per muscle, per week</strong>, spread across at least two sessions. The app ramps you there automatically &mdash; two sets per exercise for your first couple of sessions, three after that, and a fourth set unlocks on the main lifts once you&rsquo;ve banked eight sessions of a type without it feeling like too much. At full ramp you&rsquo;re in that ten-set zone.</p></div>
+    <div class="gblock"><h3>Progress</h3>
+      <p>The app suggests adding 1.25 kg only when you hit the top of the rep range on every set <em>and</em> the session didn&rsquo;t feel like too much. If a session felt like too much, it tells you to repeat the same weights &mdash; that&rsquo;s progress too.</p></div>
+    <div class="gblock"><h3>Apple Watch</h3>
+      <p>Start each session in the built-in Workout app on &ldquo;Traditional Strength Training&rdquo; for heart rate and rings. Log sets here. If you ever want wrist logging, export your CSV and import into an app like Hevy.</p></div>
+    <div class="gblock"><h3>Form checks</h3>
+      <p>Record whole sessions in Elgato Camera Hub &mdash; hit record just before tapping Begin so the app&rsquo;s set times line up with the video. Afterwards, tell Claude Code &ldquo;process video&rdquo; in the garden-gym repo: it finds the recording, pulls frames of your working sets, critiques your form, and keeps a running notes file. Once a week is plenty.</p></div>
+    <div class="gblock"><h3>Background</h3>
+      <p><a href="https://www.youtube.com/watch?v=eMjyvIQbn9M" target="_blank" rel="noopener">Minimalist plan, under 45 min &rarr;</a><br>
+      <a href="https://www.youtube.com/watch?v=xc4OtzAnVMI" target="_blank" rel="noopener">Why minimalist training works &rarr;</a></p></div>
+  </div>
+  <button class="primary" onclick="go('home')">Home</button>
+</section>
+
+<div id="rest" onclick="stopRest()"><div class="inner"><span class="clock" id="restClock">1:30</span><span class="lbl">Rest &mdash; tap to skip</span></div><div class="line"><i id="restFill"></i></div></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ---------- data ---------- */
+const PLAN = {
+A:{name:"Session A", sub:"Squat & Push", ex:[
+ {id:"gsq",n:"Goblet Squat",kit:"12 kg kettlebell",sets:3,lo:8,hi:12,unit:"kg",
+  steps:["Hold the kettlebell upside-down by its handle, hugged to your chest, elbows down.","Feet shoulder-width, toes slightly out.","Push your hips back and bend your knees until your elbows lightly touch the inside of your knees.","Heels planted, chest up — push the floor away to stand."],
+  feel:"Right when the weight sits over the middle of your feet and your back stays flat.",
+  stop:"Stop the set if your heels lift or your lower back rounds.",
+  vq:"goblet squat form beginner"},
+ {id:"dip",n:"Dips",kit:"Tower handles · band if needed",sets:3,lo:6,hi:10,unit:"reps",
+  steps:["Grip the low handles, arms straight, feet crossed behind you.","Shoulders pressed down away from your ears.","Bend your elbows until your upper arms are level with the floor.","Press back up. Too hard? Loop the thick band over the handles and rest your knees in it."],
+  feel:"Right when you take 2–3 seconds down and press up smoothly.",
+  stop:"Pinching in the front of the shoulder? Switch to push-ups today.",
+  vq:"dips beginner form assisted band"},
+ {id:"ohp",n:"Overhead Press",kit:"Straight bar + plates",sets:3,lo:6,hi:10,unit:"kg",
+  steps:["Bar at your collarbones, hands just outside your shoulders.","Squeeze your glutes and brace your stomach.","Press straight up until your arms lock and the bar is over the middle of your head.","Lower back to the collarbones with control."],
+  feel:"Right when the bar travels in a straight vertical line.",
+  stop:"Leaning back to finish reps means it's too heavy today.",
+  vq:"overhead press barbell beginner form"},
+ {id:"rdl",n:"Romanian Deadlift",kit:"Straight bar + plates",sets:3,lo:10,hi:12,unit:"kg",
+  steps:["Stand tall, bar against your thighs, palms facing you.","Soften your knees — they stay bent this same amount throughout.","Push your hips straight back, sliding the bar down your thighs to mid-shin.","Feel the stretch behind your legs, then drive your hips forward to stand."],
+  feel:"Right when the bar brushes your legs the whole way down and up.",
+  stop:"Stop the moment your lower back starts to round.",
+  vq:"romanian deadlift form beginner hip hinge"},
+ {id:"hkr",n:"Knee Raise",kit:"Pull-up bar",sets:2,lo:8,hi:12,unit:"reps",
+  steps:["Hang from the bar with straight arms.","Without swinging, lift your knees to hip height.","Lower slowly — two seconds down.","Grip tires first? Use the tower's forearm pads instead."],
+  feel:"Right when your body stays still and only your legs move.",
+  stop:"Swinging to get the knees up ends the set.",
+  vq:"hanging knee raise form beginner"}
+]},
+B:{name:"Session B", sub:"Pull & Hinge", ex:[
+ {id:"pull",n:"Pull-Up",kit:"Bar · band for extra reps",sets:3,lo:4,hi:8,unit:"reps",
+  steps:["Grip a little wider than your shoulders, palms away.","Start from a dead hang, arms completely straight.","Pull your chest towards the bar, elbows driving down.","Lower for 2–3 seconds — the lowering builds as much muscle as the pull."],
+  feel:"Right when your chin clears the bar without kicking.",
+  stop:"Out of clean reps? Band over the bar, knee in, squeeze out 2–3 more.",
+  vq:"pull up form beginner band assisted"},
+ {id:"row",n:"Bent-Over Row",kit:"Straight bar + plates",sets:3,lo:8,hi:12,unit:"kg",
+  steps:["Hinge forward like the deadlift until your torso is about 45 degrees.","Let the bar hang below your shoulders, back flat.","Pull the bar to your belly button, elbows brushing your ribs.","Pause a second, lower slowly. No jerking."],
+  feel:"Right when your torso stays still and only your arms move.",
+  stop:"Heaving with your whole body means it's too heavy.",
+  vq:"bent over row form beginner barbell"},
+ {id:"lun",n:"Reverse Lunge",kit:"12 kg kettlebell",sets:3,lo:8,hi:10,unit:"reps/leg",
+  steps:["Hold the kettlebell at your chest.","Step one foot straight back and lower that knee towards the floor.","Stop when your front thigh is level with the floor.","Push through the front heel to stand. All reps one leg, then swap."],
+  feel:"Right when the front knee tracks over the toes.",
+  stop:"Wobbly is normal — steady yourself on the tower with a finger.",
+  vq:"reverse lunge form beginner"},
+ {id:"flp",n:"Floor Press",kit:"Straight bar + plates",sets:3,lo:8,hi:12,unit:"kg",
+  steps:["Lie on your back, knees bent, bar over your chest, arms straight.","Hands slightly wider than your shoulders.","Lower until the backs of your upper arms rest lightly on the floor.","Pause a second, press back up."],
+  feel:"Right when your forearms stay vertical.",
+  stop:"Keep your lower back relaxed on the floor — no arching.",
+  vq:"dumbbell floor press form beginner"},
+ {id:"car",n:"Suitcase Carry",kit:"12 kg kettlebell",sets:2,lo:30,hi:40,unit:"secs/side",
+  steps:["Pick the kettlebell up in one hand and stand tall.","Walk slow, steady lines across the room.","Shoulders level — don't lean towards or away from it.","Swap hands each set."],
+  feel:"Right when nobody could tell which hand holds the weight.",
+  stop:"Grip fails? Put it down — that's the finish line, not a problem.",
+  vq:"suitcase carry form beginner"}
+]}};
+const WARMUP=[
+{t:"2 minutes easy on the spin bike",d:"Pedal at a pace where you could hold a conversation."},
+{t:"10 slow squats, no weight",d:"Feet shoulder-width apart, push your hips back and bend your knees as if sitting into a chair behind you, then stand. Same move as the Goblet Squat, just empty-handed."},
+{t:"8 push-ups, wall or floor",d:"Hands under your shoulders, body in one straight line. Lower your chest towards the wall or floor, then push away."},
+{t:"10 band pull-aparts",d:"Hold the light red band out in front at shoulder height, arms straight. Pull your hands apart until the band touches your chest, then control it back."},
+{t:"5 big arm circles each way",d:"Arms straight out to the sides, draw the biggest slow circles you can from the shoulder — five forwards, five backwards."}];
+const REST=90;
+
+/* ---------- storage (Claude artifact OR normal browser) ---------- */
+const store={
+  async get(k){
+    if(window.storage){ try{const r=await window.storage.get(k);return r?r.value:null}catch(e){return null} }
+    try{return localStorage.getItem(k)}catch(e){return null}
+  },
+  async set(k,v){
+    if(window.storage){ try{await window.storage.set(k,v)}catch(e){} return }
+    try{localStorage.setItem(k,v)}catch(e){}
+  }
+};
+
+/* ---------- state ---------- */
+let LOG={sessions:[]};
+let cur={type:null,i:0,entries:{}};
+
+function lastOf(type){for(let i=LOG.sessions.length-1;i>=0;i--){if(LOG.sessions[i].type===type)return LOG.sessions[i]}return null}
+function lastAny(){return LOG.sessions.length?LOG.sessions[LOG.sessions.length-1]:null}
+/* volume ramp: 2 sets → 3 sets → 4 sets on the main lifts, building
+   towards ~10 hard sets per muscle per week */
+function rampSets(ex,count,lastFeel){
+  if(ex.unit==='secs/side')return ex.sets;
+  if(count<2)return Math.min(ex.sets,2);
+  if(count>=8&&ex.sets===3&&lastFeel!=='much')return 4;
+  return ex.sets;
+}
+
+/* ---------- home ---------- */
+function renderHome(){
+  const d=new Date();
+  document.getElementById('homeDate').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  const last=lastAny();
+  const next=last&&last.type==='A'?'B':'A';
+  const n=LOG.sessions.length;
+  let line='First session. The plan starts you at two sets per exercise — learn the movements first.';
+  if(n>0){
+    line='Last: '+PLAN[last.type].name+' on '+last.date;
+    if(last.feel==='much') line+=' — it felt like too much, so keep the same weights and stop a rep earlier today.';
+    else if(n<4) line+='. Still ramping you up gently — sets increase as sessions bank.';
+  }
+  document.getElementById('homeSuggest').textContent=line;
+  document.getElementById('startMain').textContent='Start '+PLAN[next].name;
+  document.getElementById('startMain').onclick=()=>beginSession(next);
+  const alt=next==='A'?'B':'A';
+  document.getElementById('startAlt').textContent='or '+PLAN[alt].name+' instead';
+  document.getElementById('startAlt').onclick=()=>beginSession(alt);
+}
+
+/* ---------- session flow ---------- */
+function beginSession(type){
+  cur={type,i:0,entries:{}};
+  document.getElementById('warmLabel').textContent=PLAN[type].name+' — '+PLAN[type].sub;
+  let h='';WARMUP.forEach((w,i)=>{h+='<div class="check"><input type="checkbox" id="wu'+i+'"><div class="ct"><label for="wu'+i+'">'+w.t+'</label><span class="cd">'+w.d+'</span></div></div>'});
+  document.getElementById('warmList').innerHTML=h;
+  go('warm');
+}
+function startExercises(){cur.i=0;cur.start=Date.now();renderExercise();go('ex')}
+
+function renderExercise(){
+  const plan=PLAN[cur.type];const ex=plan.ex[cur.i];
+  const last=lastOf(cur.type);const lastE=last?last.entries[ex.id]:null;
+  const isKg=ex.unit==='kg';
+  const doneCount=LOG.sessions.filter(s=>s.type===cur.type).length;
+  const nSets=rampSets(ex,doneCount,last?last.feel:null);
+  let h='<div class="dots">';
+  plan.ex.forEach((_,j)=>{h+='<i class="'+(j<=cur.i?'hit':'')+'"></i>'});
+  h+='</div>';
+  h+='<div class="small">'+(cur.i+1)+' of '+plan.ex.length+' · '+ex.kit+'</div>';
+  h+='<div class="big">'+ex.n+'</div>';
+  h+='<div class="target">'+nSets+' sets · '+ex.lo+'–'+ex.hi+' '+(isKg?'reps':ex.unit)+'</div>';
+
+  /* nudges from last time + feel */
+  if(lastE){
+    const parts=lastE.map(x=>(x.w!=null?x.w+'kg × ':'')+x.r);
+    h+='<div class="lastline">Last time: '+parts.join(' · ')+'</div>';
+    const toppedOut=lastE.length>=2&&lastE.every(x=>x.r>=ex.hi);
+    if(last.feel==='much'){h+='<div class="nudge easy-off">Same weights as last time. Stopping a rep earlier is fine.</div>'}
+    else if(toppedOut){h+='<div class="nudge">You topped the range last time — add 1.25 kg today'+(isKg?'':' or use the harder version')+'.</div>'}
+  }
+  if(nSets>ex.sets){h+='<div class="nudge">Fourth set unlocked — eight sessions banked. This is the ten-sets-a-week zone.</div>'}
+
+  h+='<div class="sets">';
+  for(let s=0;s<nSets;s++){
+    const ph=lastE&&lastE[s]&&lastE[s].w!=null?lastE[s].w:(isKg?'kg':'');
+    h+='<div class="set">';
+    h+='<div class="f"><label>'+(isKg?'Weight':'&nbsp;')+'</label><input inputmode="decimal" placeholder="'+ph+'" id="w'+s+'" '+(isKg?'':'style="visibility:hidden"')+'></div>';
+    h+='<div class="x">×</div>';
+    h+='<div class="f"><label>'+(isKg?'Reps':ex.unit)+'</label><input inputmode="numeric" id="r'+s+'"></div>';
+    h+='<button class="tick" id="t'+s+'" aria-label="Log set '+(s+1)+'" onclick="tickSet('+s+')">✓</button>';
+    h+='</div>';
+  }
+  h+='</div>';
+
+  h+='<details><summary>How to do it</summary><ol class="steps">';
+  ex.steps.forEach(s=>{h+='<li>'+s+'</li>'});
+  h+='</ol><div class="hint">'+ex.feel+'</div><div class="hint stop">'+ex.stop+'</div>';
+  h+='<a class="vlink" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+encodeURIComponent(ex.vq)+'">Watch a demo →</a></details>';
+
+  const lastEx=cur.i===plan.ex.length-1;
+  h+='<div class="navrow">';
+  h+='<button class="back" onclick="prevEx()" aria-label="Back">&larr;</button>';
+  h+='<button class="primary" onclick="nextEx()">'+(lastEx?'Finish':'Next')+'</button>';
+  h+='</div>';
+  document.getElementById('s-ex').innerHTML=h;
+  window.scrollTo(0,0);
+}
+function tickSet(s){
+  const ex=PLAN[cur.type].ex[cur.i];
+  const wEl=document.getElementById('w'+s),rEl=document.getElementById('r'+s);
+  let r=rEl.value.trim();
+  if(!r){toast('Add your reps first');return}
+  let w=wEl.value.trim();
+  if(!w&&wEl.placeholder&&wEl.placeholder!=='kg')w=wEl.placeholder; /* accept last weight */
+  if(!cur.entries[ex.id])cur.entries[ex.id]=[];
+  cur.entries[ex.id][s]={w:w?parseFloat(w):null,r:parseFloat(r),t:cur.start?Math.round((Date.now()-cur.start)/1000):null};
+  document.getElementById('t'+s).classList.add('done');
+  startRest();
+}
+function nextEx(){
+  stopRest();
+  if(cur.i<PLAN[cur.type].ex.length-1){cur.i++;renderExercise()}
+  else go('feel');
+}
+function prevEx(){
+  stopRest();
+  if(cur.i>0){cur.i--;renderExercise()}
+  else go('warm');
+}
+
+/* ---------- save ---------- */
+async function saveSession(feel){
+  const entries={};let any=false;
+  Object.keys(cur.entries).forEach(id=>{
+    const d=cur.entries[id].filter(x=>x);
+    if(d.length){entries[id]=d;any=true}
+  });
+  if(!any){toast('Nothing logged — no session saved');go('home');return}
+  LOG.sessions.push({date:new Date().toISOString().slice(0,10),type:cur.type,feel,startedAt:cur.start?new Date(cur.start).toISOString():null,entries});
+  await store.set('gym-log-v2',JSON.stringify(LOG));
+  const sets=Object.values(entries).reduce((a,b)=>a+b.length,0);
+  document.getElementById('doneDate').textContent=PLAN[cur.type].name+' saved';
+  document.getElementById('doneLine').textContent=sets+' sets logged. '+(feel==='much'?'Next time: same weights, one rep earlier.':feel==='easy'?'Nice — room to push a little next time.':'That\u2019s the sweet spot.');
+  renderHome();renderHistory();
+  go('done');
+}
+
+/* ---------- history ---------- */
+function renderHistory(){
+  const el=document.getElementById('histList');
+  if(!LOG.sessions.length){el.innerHTML='<div class="empty">No sessions yet.</div>';return}
+  let h='';
+  [...LOG.sessions].reverse().forEach(s=>{
+    const feelTxt=s.feel==='much'?'too much':s.feel==='easy'?'easy':'about right';
+    h+='<div class="hitem"><b>'+s.date+' · '+PLAN[s.type].name+'</b> <span class="small">· felt '+feelTxt+'</span><div class="hlines">';
+    Object.keys(s.entries).forEach(id=>{
+      const ex=PLAN[s.type].ex.find(e=>e.id===id);
+      h+=(ex?ex.n:id)+': '+s.entries[id].map(x=>(x.w!=null?x.w+'kg×':'')+x.r).join(', ')+'<br>';
+    });
+    h+='</div></div>';
+  });
+  el.innerHTML=h;
+}
+function exportCSV(){
+  let csv='date,session,feel,exercise,set,weight_kg,reps,t_sec\n';
+  LOG.sessions.forEach(s=>{Object.keys(s.entries).forEach(id=>{
+    const ex=PLAN[s.type].ex.find(e=>e.id===id);
+    s.entries[id].forEach((x,i)=>{csv+=[s.date,s.type,s.feel||'',(ex?ex.n:id),i+1,(x.w!=null?x.w:''),x.r,(x.t!=null?x.t:'')].join(',')+'\n'});
+  })});
+  if(navigator.clipboard){navigator.clipboard.writeText(csv).then(()=>toast('CSV copied')).catch(()=>toast('Copy failed'))}
+}
+async function clearLog(){
+  if(!confirm('Delete all logged sessions?'))return;
+  LOG={sessions:[]};await store.set('gym-log-v2',JSON.stringify(LOG));
+  renderHistory();renderHome();toast('Log cleared');
+}
+
+/* ---------- rest ---------- */
+let rLeft=0,rInt=null;
+function startRest(){
+  stopRest();rLeft=REST;
+  document.getElementById('rest').classList.add('on');
+  rTick();rInt=setInterval(rTick,1000);
+}
+function rTick(){
+  const m=Math.floor(rLeft/60),s=rLeft%60;
+  document.getElementById('restClock').textContent=m+':'+String(s).padStart(2,'0');
+  document.getElementById('restFill').style.width=(rLeft/REST*100)+'%';
+  if(rLeft<=0){stopRest();toast('Rest over');return}
+  rLeft--;
+}
+function stopRest(){if(rInt){clearInterval(rInt);rInt=null}document.getElementById('rest').classList.remove('on')}
+
+/* ---------- misc ---------- */
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s-'+id).classList.add('on');
+  window.scrollTo(0,0);
+}
+let tT=null;
+function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('on');
+  if(tT)clearTimeout(tT);tT=setTimeout(()=>el.classList.remove('on'),2200)}
+
+(async function(){
+  const raw=await store.get('gym-log-v2');
+  if(raw){try{LOG=JSON.parse(raw)}catch(e){}}
+  renderHome();renderHistory();
+})();
+</script>
+</body>
+</html>
