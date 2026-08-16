@@ -410,7 +410,7 @@ function renderExercise(){
     h+='<div class="set">';
     h+='<div class="f"><label>'+(isKg?'Weight':'&nbsp;')+'</label><input inputmode="decimal" value="'+wDef+'" placeholder="'+(isKg?'kg':'')+'" id="w'+s+'" '+(isKg?'':'style="visibility:hidden"')+'></div>';
     h+='<div class="x">×</div>';
-    h+='<div class="f"><label>'+(isKg?'Reps':ex.unit)+'</label><input inputmode="numeric" id="r'+s+'"></div>';
+    h+='<div class="f"><label>'+(isKg?'Reps':ex.unit)+'</label><input inputmode="numeric" value="'+ex.hi+'" id="r'+s+'"></div>';
     h+='<button class="tick" id="t'+s+'" aria-label="Log set '+(s+1)+'" onclick="tickSet('+s+')">✓</button>';
     h+='</div>';
   }

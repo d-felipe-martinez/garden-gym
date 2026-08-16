@@ -89,10 +89,12 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
   last session of that type felt like "too much". Timed carries stay at 2.
 - **Feel-based gating:** "too much" suppresses add-weight suggestions and shows
   a "same weights, stop a rep earlier" nudge on every exercise next session.
-- **Weight prefill:** kg inputs come pre-filled so Danny types nothing on a
-  normal day — last session's weight, bumped by 1.25 kg when every set topped
+- **Weight & reps prefill:** inputs come pre-filled so Danny types nothing on
+  a normal day. Weight: last session's, bumped by 1.25 kg when every set topped
   the range and the session didn't feel like too much, or the exercise's
-  `start` value on day one (`start` assumes the ~5 kg bar; he can overtype).
+  `start` value on day one (`start` assumes the ~5 kg bar). Reps: the top of
+  the rep range (`hi`) — he edits down when a set ends early. Everything is
+  overtypeable; a tick logs whatever the boxes show.
 - **Session clock:** `cur.start` is set when Begin is tapped; every logged set
   stores `t`. The warm-up screen tells Danny to start the Camera Hub recording
   just before tapping Begin, so `t` ≈ video timestamp. This powers form checks.
