@@ -22,9 +22,12 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
 1. **No jargon without explanation.** Every exercise AND warm-up item is written
    in plain English with step-by-step instructions. Never assume he knows what a
    movement is called or how to do it. Any new movement needs steps, a "feels
-   right when" line, a "stop if" safety line, and a hand-picked demo-video link
-   (`vid` in PLAN — choose the shortest, clearest beginner demo you can find and
-   verify the URL resolves; `vq` keeps a YouTube-search fallback).
+   right when" line, a "stop if" safety line, and two hand-picked videos in PLAN:
+   `short` — a quick demo (15–75 s, tap-and-see the movement) — and `vid` — a
+   full tutorial, with `&t=<s>s` jumping past the intro when the video has
+   chapter markers (never guess a timestamp; no chapters → no `t`). Verify both:
+   oEmbed for existence/title, `"lengthSeconds"` on the watch page for duration,
+   chapter timestamps from the description. `vq` keeps search terms for repair.
 2. **Start slow, build up.** The app enforces a gentle ramp (see Volume below).
    Never make an edit that pushes intensity against a "too much" check-in. The
    default direction under uncertainty is easier, not harder.
@@ -94,6 +97,8 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
   stores `t`. The warm-up screen tells Danny to start the Camera Hub recording
   just before tapping Begin, so `t` ≈ video timestamp. This powers form checks.
 - **Rest timer:** 90 s, starts on set-tick, tap to dismiss.
+- **How-to videos:** each exercise's fold-out shows "Quick demo" (`short`)
+  leading and "Full tutorial" (`vid`) muted beside it.
 - **CSV export:** `date,session,feel,exercise,set,weight_kg,reps,t_sec`.
 
 ## The training plan (encoded in the PLAN object)
