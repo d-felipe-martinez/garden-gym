@@ -231,58 +231,70 @@ summary::-webkit-details-marker{display:none}
 <script>
 /* ---------- data ---------- */
 const PLAN = {
+/* start = day-one weight prefill (assumes the ~5 kg bar; kettlebell where fixed).
+   vid = hand-picked demo video, chosen short and clear; vq stays as search fallback. */
 A:{name:"Session A", sub:"Squat & Push", ex:[
- {id:"gsq",n:"Goblet Squat",kit:"12 kg kettlebell",sets:3,lo:8,hi:12,unit:"kg",
+ {id:"gsq",n:"Goblet Squat",kit:"12 kg kettlebell",sets:3,lo:8,hi:12,unit:"kg",start:12,
   steps:["Hold the kettlebell upside-down by its handle, hugged to your chest, elbows down.","Feet shoulder-width, toes slightly out.","Push your hips back and bend your knees until your elbows lightly touch the inside of your knees.","Heels planted, chest up — push the floor away to stand."],
   feel:"Right when the weight sits over the middle of your feet and your back stays flat.",
   stop:"Stop the set if your heels lift or your lower back rounds.",
+  vid:"https://www.youtube.com/watch?v=MeIiIdhvXT4",
   vq:"goblet squat form beginner"},
  {id:"dip",n:"Dips",kit:"Tower handles · band if needed",sets:3,lo:6,hi:10,unit:"reps",
   steps:["Grip the low handles, arms straight, feet crossed behind you.","Shoulders pressed down away from your ears.","Bend your elbows until your upper arms are level with the floor.","Press back up. Too hard? Loop the thick band over the handles and rest your knees in it."],
   feel:"Right when you take 2–3 seconds down and press up smoothly.",
   stop:"Pinching in the front of the shoulder? Switch to push-ups today.",
+  vid:"https://www.youtube.com/watch?v=FCxl2y4nsTA",
   vq:"dips beginner form assisted band"},
- {id:"ohp",n:"Overhead Press",kit:"Straight bar + plates",sets:3,lo:6,hi:10,unit:"kg",
+ {id:"ohp",n:"Overhead Press",kit:"Straight bar + plates",sets:3,lo:6,hi:10,unit:"kg",start:7.5,
   steps:["Bar at your collarbones, hands just outside your shoulders.","Squeeze your glutes and brace your stomach.","Press straight up until your arms lock and the bar is over the middle of your head.","Lower back to the collarbones with control."],
   feel:"Right when the bar travels in a straight vertical line.",
   stop:"Leaning back to finish reps means it's too heavy today.",
+  vid:"https://www.youtube.com/watch?v=afR3tPH6y_g",
   vq:"overhead press barbell beginner form"},
- {id:"rdl",n:"Romanian Deadlift",kit:"Straight bar + plates",sets:3,lo:10,hi:12,unit:"kg",
+ {id:"rdl",n:"Romanian Deadlift",kit:"Straight bar + plates",sets:3,lo:10,hi:12,unit:"kg",start:10,
   steps:["Stand tall, bar against your thighs, palms facing you.","Soften your knees — they stay bent this same amount throughout.","Push your hips straight back, sliding the bar down your thighs to mid-shin.","Feel the stretch behind your legs, then drive your hips forward to stand."],
   feel:"Right when the bar brushes your legs the whole way down and up.",
   stop:"Stop the moment your lower back starts to round.",
+  vid:"https://www.youtube.com/watch?v=lKLYvNGz6mk",
   vq:"romanian deadlift form beginner hip hinge"},
  {id:"hkr",n:"Knee Raise",kit:"Pull-up bar",sets:2,lo:8,hi:12,unit:"reps",
-  steps:["Hang from the bar with straight arms.","Without swinging, lift your knees to hip height.","Lower slowly — two seconds down.","Grip tires first? Use the tower's forearm pads instead."],
+  steps:["Hang from the bar with straight arms.","Without swinging, lift your knees to hip height.","Lower slowly — two seconds down.","Grip tires first? Use the tower's forearm pads instead.","Topping 12 with ease? That's the harder version: kneel on a mat with the ab wheel under your shoulders, roll it forwards only as far as your back stays flat, then pull it back."],
   feel:"Right when your body stays still and only your legs move.",
   stop:"Swinging to get the knees up ends the set.",
+  vid:"https://www.youtube.com/watch?v=0BmrlKCfTPU",
   vq:"hanging knee raise form beginner"}
 ]},
 B:{name:"Session B", sub:"Pull & Hinge", ex:[
- {id:"pull",n:"Pull-Up",kit:"Bar · band for extra reps",sets:3,lo:4,hi:8,unit:"reps",
+ {id:"pull",n:"Pull-Up",kit:"Bar · 20-inch box to assist",sets:3,lo:4,hi:8,unit:"reps",
   steps:["Grip a little wider than your shoulders, palms away.","Start from a dead hang, arms completely straight.","Pull your chest towards the bar, elbows driving down.","Lower for 2–3 seconds — the lowering builds as much muscle as the pull."],
   feel:"Right when your chin clears the bar without kicking.",
-  stop:"Out of clean reps? Band over the bar, knee in, squeeze out 2–3 more.",
-  vq:"pull up form beginner band assisted"},
- {id:"row",n:"Bent-Over Row",kit:"Straight bar + plates",sets:3,lo:8,hi:12,unit:"kg",
+  stop:"Out of clean reps? Step up from the box to the top position and lower yourself for three slow seconds — slow lowering builds the same muscle.",
+  vid:"https://www.youtube.com/watch?v=eGo4IYlbE5g",
+  vq:"pull up form beginner box assisted negative"},
+ {id:"row",n:"Bent-Over Row",kit:"Straight bar + plates",sets:3,lo:8,hi:12,unit:"kg",start:10,
   steps:["Hinge forward like the deadlift until your torso is about 45 degrees.","Let the bar hang below your shoulders, back flat.","Pull the bar to your belly button, elbows brushing your ribs.","Pause a second, lower slowly. No jerking."],
   feel:"Right when your torso stays still and only your arms move.",
   stop:"Heaving with your whole body means it's too heavy.",
+  vid:"https://www.youtube.com/watch?v=FWJR5Ve8bnQ",
   vq:"bent over row form beginner barbell"},
  {id:"lun",n:"Reverse Lunge",kit:"12 kg kettlebell",sets:3,lo:8,hi:10,unit:"reps/leg",
   steps:["Hold the kettlebell at your chest.","Step one foot straight back and lower that knee towards the floor.","Stop when your front thigh is level with the floor.","Push through the front heel to stand. All reps one leg, then swap."],
   feel:"Right when the front knee tracks over the toes.",
   stop:"Wobbly is normal — steady yourself on the tower with a finger.",
+  vid:"https://www.youtube.com/watch?v=ALl174GTuoY",
   vq:"reverse lunge form beginner"},
- {id:"flp",n:"Floor Press",kit:"Straight bar + plates",sets:3,lo:8,hi:12,unit:"kg",
-  steps:["Lie on your back, knees bent, bar over your chest, arms straight.","Hands slightly wider than your shoulders.","Lower until the backs of your upper arms rest lightly on the floor.","Pause a second, press back up."],
+ {id:"flp",n:"Floor Press",kit:"Straight bar + plates · mat",sets:3,lo:8,hi:12,unit:"kg",start:7.5,
+  steps:["Lie on your back on a mat, knees bent, bar over your chest, arms straight.","Hands slightly wider than your shoulders.","Lower until the backs of your upper arms rest lightly on the floor.","Pause a second, press back up."],
   feel:"Right when your forearms stay vertical.",
   stop:"Keep your lower back relaxed on the floor — no arching.",
-  vq:"dumbbell floor press form beginner"},
+  vid:"https://www.youtube.com/watch?v=gacJl2rHwtg",
+  vq:"barbell floor press form beginner"},
  {id:"car",n:"Suitcase Carry",kit:"12 kg kettlebell",sets:2,lo:30,hi:40,unit:"secs/side",
   steps:["Pick the kettlebell up in one hand and stand tall.","Walk slow, steady lines across the room.","Shoulders level — don't lean towards or away from it.","Swap hands each set."],
   feel:"Right when nobody could tell which hand holds the weight.",
   stop:"Grip fails? Put it down — that's the finish line, not a problem.",
+  vid:"https://www.youtube.com/watch?v=uWMaKi7yzCg",
   vq:"suitcase carry form beginner"}
 ]}};
 const WARMUP=[
@@ -364,21 +376,28 @@ function renderExercise(){
   h+='<div class="big">'+ex.n+'</div>';
   h+='<div class="target">'+nSets+' sets · '+ex.lo+'–'+ex.hi+' '+(isKg?'reps':ex.unit)+'</div>';
 
-  /* nudges from last time + feel */
+  /* nudges from last time + feel; addW pre-bumps the prefilled weight */
+  const toppedOut=lastE&&lastE.length>=2&&lastE.every(x=>x.r>=ex.hi);
+  const addW=toppedOut&&last.feel!=='much';
   if(lastE){
     const parts=lastE.map(x=>(x.w!=null?x.w+'kg × ':'')+x.r);
     h+='<div class="lastline">Last time: '+parts.join(' · ')+'</div>';
-    const toppedOut=lastE.length>=2&&lastE.every(x=>x.r>=ex.hi);
     if(last.feel==='much'){h+='<div class="nudge easy-off">Same weights as last time. Stopping a rep earlier is fine.</div>'}
-    else if(toppedOut){h+='<div class="nudge">You topped the range last time — add 1.25 kg today'+(isKg?'':' or use the harder version')+'.</div>'}
+    else if(toppedOut){h+='<div class="nudge">You topped the range last time — '+(isKg?'1.25 kg already added below':'try the harder version today')+'.</div>'}
   }
   if(nSets>ex.sets){h+='<div class="nudge">Fourth set unlocked — eight sessions banked. This is the ten-sets-a-week zone.</div>'}
 
   h+='<div class="sets">';
   for(let s=0;s<nSets;s++){
-    const ph=lastE&&lastE[s]&&lastE[s].w!=null?lastE[s].w:(isKg?'kg':'');
+    /* weight comes prefilled: last session's (+1.25 when earned), or the plan's start weight */
+    let wDef='';
+    if(isKg){
+      const lw=lastE?lastE[Math.min(s,lastE.length-1)].w:null;
+      if(lw!=null)wDef=addW?Math.round((lw+1.25)*100)/100:lw;
+      else if(ex.start!=null)wDef=ex.start;
+    }
     h+='<div class="set">';
-    h+='<div class="f"><label>'+(isKg?'Weight':'&nbsp;')+'</label><input inputmode="decimal" placeholder="'+ph+'" id="w'+s+'" '+(isKg?'':'style="visibility:hidden"')+'></div>';
+    h+='<div class="f"><label>'+(isKg?'Weight':'&nbsp;')+'</label><input inputmode="decimal" value="'+wDef+'" placeholder="'+(isKg?'kg':'')+'" id="w'+s+'" '+(isKg?'':'style="visibility:hidden"')+'></div>';
     h+='<div class="x">×</div>';
     h+='<div class="f"><label>'+(isKg?'Reps':ex.unit)+'</label><input inputmode="numeric" id="r'+s+'"></div>';
     h+='<button class="tick" id="t'+s+'" aria-label="Log set '+(s+1)+'" onclick="tickSet('+s+')">✓</button>';
@@ -389,7 +408,8 @@ function renderExercise(){
   h+='<details><summary>How to do it</summary><ol class="steps">';
   ex.steps.forEach(s=>{h+='<li>'+s+'</li>'});
   h+='</ol><div class="hint">'+ex.feel+'</div><div class="hint stop">'+ex.stop+'</div>';
-  h+='<a class="vlink" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+encodeURIComponent(ex.vq)+'">Watch a demo →</a></details>';
+  h+='<a class="vlink" target="_blank" rel="noopener" href="'+ex.vid+'">Watch the demo →</a>';
+  h+='<a class="vlink" target="_blank" rel="noopener" style="margin-left:16px;color:var(--mut)" href="https://www.youtube.com/results?search_query='+encodeURIComponent(ex.vq)+'">more videos</a></details>';
 
   const lastEx=cur.i===plan.ex.length-1;
   h+='<div class="navrow">';

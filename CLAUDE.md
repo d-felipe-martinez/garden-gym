@@ -22,7 +22,9 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
 1. **No jargon without explanation.** Every exercise AND warm-up item is written
    in plain English with step-by-step instructions. Never assume he knows what a
    movement is called or how to do it. Any new movement needs steps, a "feels
-   right when" line, a "stop if" safety line, and a demo-video search link.
+   right when" line, a "stop if" safety line, and a hand-picked demo-video link
+   (`vid` in PLAN — choose the shortest, clearest beginner demo you can find and
+   verify the URL resolves; `vq` keeps a YouTube-search fallback).
 2. **Start slow, build up.** The app enforces a gentle ramp (see Volume below).
    Never make an edit that pushes intensity against a "too much" check-in. The
    default direction under uncertainty is easier, not harder.
@@ -55,6 +57,11 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
 - 12 kg cast-iron kettlebell, 10 kg soft kettlebell
 - Two loadable 1" bars with spring collars; plates: 1.25 kg ×2 (green),
   2.5 kg, 5 kg (rubber); one foam-padded bar
+- 20" soft plyo box (pull-up assist / negatives, step-ups if ever needed)
+- Ab roller wheel (harder progression from knee raises)
+- Mirafit aerobic step platform
+- Two exercise mats; grey fabric loop band; red + teal flat therabands;
+  a handled skipping rope (probably — confirm before programming it)
 - Elgato Facecam 4K + Camera Hub in the garden office (records sessions)
 - Spin bike (warm-ups and optional interval day)
 - Planned: Apple Watch (~Sept 2026); a ~£1,000 all-in-one machine is deferred
@@ -79,6 +86,10 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
   last session of that type felt like "too much". Timed carries stay at 2.
 - **Feel-based gating:** "too much" suppresses add-weight suggestions and shows
   a "same weights, stop a rep earlier" nudge on every exercise next session.
+- **Weight prefill:** kg inputs come pre-filled so Danny types nothing on a
+  normal day — last session's weight, bumped by 1.25 kg when every set topped
+  the range and the session didn't feel like too much, or the exercise's
+  `start` value on day one (`start` assumes the ~5 kg bar; he can overtype).
 - **Session clock:** `cur.start` is set when Begin is tapped; every logged set
   stores `t`. The warm-up screen tells Danny to start the Camera Hub recording
   just before tapping Begin, so `t` ≈ video timestamp. This powers form checks.
