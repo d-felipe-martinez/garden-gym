@@ -64,6 +64,13 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
   meta-analysis); consistent stretching DOES improve ROM/perceived stiffness
   over weeks (Sports Med 2025 meta-regression). Hence the standalone evening
   Stretch screen, honestly framed — never sell it as soreness prevention.
+- **Eccentric-first for movements he can't yet do:** muscles produce more
+  force lowering than lifting, and eccentric-emphasis training builds strength
+  at least as fast as concentric (Roig et al. 2009 BJSM meta-analysis; 2026
+  MDPI meta-analysis across populations). Encoded in Assisted Pull-Up:
+  unassisted reps first, then 3–5 s box negatives to fill the set — the
+  researched route to a first full pull-up. Never prescribe rep targets that
+  assume abilities he hasn't demonstrated (he starts at 0–3 pull-ups).
 
 ## Equipment inventory (all exercises must map to this)
 
@@ -108,6 +115,10 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
   `start` value on day one (`start` assumes the ~5 kg bar). Reps: the top of
   the rep range (`hi`) — he edits down when a set ends early. Everything is
   overtypeable; a tick logs whatever the boxes show.
+- **Weight box visibility:** shown when the unit is kg OR the exercise has a
+  `start` (kettlebell lifts like Reverse Lunge / Suitcase Carry log their
+  weight even though reps/secs is the working unit; the auto +1.25 bump stays
+  kg-only — those progress via harder variations instead).
 - **Session clock:** `cur.start` is set when Begin is tapped; every logged set
   stores `t`. The warm-up screen tells Danny to start the Camera Hub recording
   just before tapping Begin, so `t` ≈ video timestamp. This powers form checks.
@@ -118,8 +129,10 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
 - **How-to videos:** each exercise's fold-out shows "Quick demo" (`short`)
   leading and "Full tutorial" (`vid`) muted beside it; both optional in
   render (bike has none — not a new movement).
-- **Form tips:** each exercise may carry a `tip` — the latest form-check note,
-  rendered on the exercise screen. "process video" sessions rewrite these.
+- **Form tips:** each exercise may carry a `tip`, rendered verbatim on the
+  exercise screen — video-review notes start with "Form check:", coaching
+  notes (like the pull-up realism tip) stand alone. "process video" sessions
+  rewrite the form-check ones.
 - **Setup checklist** (`SETUP`): water, trainers (he lifted in socks once),
   AirPods, camera recording + whole tower in frame, floor clear, Apple Watch
   (placeholder until it arrives).
@@ -132,8 +145,9 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
 
 - Session A — Squat & Push: Goblet Squat, Assisted Dips, Overhead Press,
   Romanian Deadlift, Knee Raise (pads).
-- Session B — Pull & Hinge: Pull-Up, Bent-Over Row, Reverse Lunge, Floor Press,
-  Suitcase Carry.
+- Session B — Pull & Hinge: Assisted Pull-Up (unassisted first, box negatives
+  top up the set; box retires at 5 unassisted in one set), Bent-Over Row,
+  Reverse Lunge, Floor Press, Suitcase Carry.
 - Session S — Saturday Extras (optional, light, no ramp): Suitcase Carry, Knee
   Raise, Bike Intervals 4–6 × (30 s hard / 90 s easy). S reuses the same
   exercise objects/ids as A/B, so edits and history stay in sync. The home
