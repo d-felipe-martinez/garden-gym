@@ -123,6 +123,9 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
 - **Setup checklist** (`SETUP`): water, trainers (he lifted in socks once),
   AirPods, camera recording + whole tower in frame, floor clear, Apple Watch
   (placeholder until it arrives).
+- **Warm-up & stretch demos:** every `WARMUP` and `STRETCH` item carries `v` —
+  a verified YouTube Short (same vetting as exercise `short` links), rendered
+  as a small "Quick demo →" under the item. `SETUP` items have no videos.
 - **CSV export:** `date,session,feel,exercise,set,weight_kg,reps,t_sec`.
 
 ## The training plan (encoded in the PLAN object)

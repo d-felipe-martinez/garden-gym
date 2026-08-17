@@ -348,19 +348,20 @@ const SETUP=[
 {t:"Camera recording, whole tower in frame",d:"Start Camera Hub now and check nothing cuts you off at the dip handles — your set times then line up with the video."},
 {t:"Floor clear",d:"Bar and kettlebells out of the walking line."},
 {t:"Apple Watch: start a Traditional Strength Training workout",d:"Skip this one until it arrives."}];
+/* v = verified YouTube Short demo (same vetting as exercise `short` links) */
 const STRETCH=[
-{t:"Standing quad pull — 30 s each leg",d:"Stand tall holding the tower for balance, pull one foot up behind you to your bum, knees together. You'll feel it down the front of the thigh."},
-{t:"Hamstring — 30 s each leg",d:"Heel up on the box, leg straight, hips square. Hinge forward slightly from the hips until the back of the thigh pulls."},
-{t:"Hip-flexor lunge — 30 s each side",d:"Kneel one knee on the mat, other foot flat in front. Push your hips gently forward, torso tall. Front of the hip on the kneeling side stretches."},
-{t:"Chest opener — 30 s",d:"Hold the light band overhead, hands wide, and pull gently back until the chest opens. Or forearm on a door frame and step through."},
-{t:"Dead hang — 20–30 s",d:"Hang from the pull-up bar, arms straight, shoulders relaxed and lengthening. Grip gives out? Keep your feet on the box and leave some weight on them."},
-{t:"Calf against the wall — 30 s each leg",d:"Hands on the wall, one leg stepped back, heel pressed down, lean in until the calf pulls."}];
+{t:"Standing quad pull — 30 s each leg",d:"Stand tall holding the tower for balance, pull one foot up behind you to your bum, knees together. You'll feel it down the front of the thigh.",v:"https://www.youtube.com/shorts/Ztwz8rrDShk"},
+{t:"Hamstring — 30 s each leg",d:"Heel up on the box, leg straight, hips square. Hinge forward slightly from the hips until the back of the thigh pulls.",v:"https://www.youtube.com/shorts/TZVJY8BwjyA"},
+{t:"Hip-flexor lunge — 30 s each side",d:"Kneel one knee on the mat, other foot flat in front. Push your hips gently forward, torso tall. Front of the hip on the kneeling side stretches.",v:"https://www.youtube.com/shorts/ktgtEWGhFd8"},
+{t:"Chest opener — 30 s",d:"Hold the light band overhead, hands wide, and pull gently back until the chest opens. Or forearm on a door frame and step through.",v:"https://www.youtube.com/shorts/3OfeaZEGJxE"},
+{t:"Dead hang — 20–30 s",d:"Hang from the pull-up bar, arms straight, shoulders relaxed and lengthening. Grip gives out? Keep your feet on the box and leave some weight on them.",v:"https://www.youtube.com/shorts/dOCQjaasbGs"},
+{t:"Calf against the wall — 30 s each leg",d:"Hands on the wall, one leg stepped back, heel pressed down, lean in until the calf pulls.",v:"https://www.youtube.com/shorts/cc0k8cQxeEU"}];
 const WARMUP=[
-{t:"2 minutes easy on the spin bike",d:"Pedal at a pace where you could hold a conversation."},
-{t:"10 slow squats, no weight",d:"Feet shoulder-width apart, push your hips back and bend your knees as if sitting into a chair behind you, then stand. Same move as the Goblet Squat, just empty-handed."},
-{t:"8 push-ups, wall or floor",d:"Hands under your shoulders, body in one straight line. Lower your chest towards the wall or floor, then push away."},
-{t:"10 band pull-aparts",d:"Hold the light red band out in front at shoulder height, arms straight. Pull your hands apart until the band touches your chest, then control it back."},
-{t:"5 big arm circles each way",d:"Arms straight out to the sides, draw the biggest slow circles you can from the shoulder — five forwards, five backwards."}];
+{t:"2 minutes easy on the spin bike",d:"Pedal at a pace where you could hold a conversation.",v:"https://www.youtube.com/shorts/sJPxNtLQ9Fc"},
+{t:"10 slow squats, no weight",d:"Feet shoulder-width apart, push your hips back and bend your knees as if sitting into a chair behind you, then stand. Same move as the Goblet Squat, just empty-handed.",v:"https://www.youtube.com/shorts/Qgpxx1Bxmgs"},
+{t:"8 push-ups, wall or floor",d:"Hands under your shoulders, body in one straight line. Lower your chest towards the wall or floor, then push away.",v:"https://www.youtube.com/shorts/zUymek3A64A"},
+{t:"10 band pull-aparts",d:"Hold the light red band out in front at shoulder height, arms straight. Pull your hands apart until the band touches your chest, then control it back.",v:"https://www.youtube.com/shorts/qi2y-eI_kuI"},
+{t:"5 big arm circles each way",d:"Arms straight out to the sides, draw the biggest slow circles you can from the shoulder — five forwards, five backwards.",v:"https://www.youtube.com/shorts/RN40wyH6x9o"}];
 const REST=90;
 
 /* ---------- storage (Claude artifact OR normal browser) ---------- */
@@ -415,7 +416,7 @@ function renderHome(){
 
 /* ---------- session flow ---------- */
 function checklist(items,prefix){
-  let h='';items.forEach((w,i)=>{h+='<div class="check"><input type="checkbox" id="'+prefix+i+'"><div class="ct"><label for="'+prefix+i+'">'+w.t+'</label>'+(w.d?'<span class="cd">'+w.d+'</span>':'')+'</div></div>'});
+  let h='';items.forEach((w,i)=>{h+='<div class="check"><input type="checkbox" id="'+prefix+i+'"><div class="ct"><label for="'+prefix+i+'">'+w.t+'</label>'+(w.d?'<span class="cd">'+w.d+'</span>':'')+(w.v?'<a class="vlink" style="font-size:.83rem" target="_blank" rel="noopener" href="'+w.v+'">Quick demo →</a>':'')+'</div></div>'});
   return h;
 }
 function beginSession(type){
