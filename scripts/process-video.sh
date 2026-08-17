@@ -10,10 +10,11 @@
 # Frames are 1280 px wide, written to ~/Desktop/form-check-<timestamp>/.
 set -euo pipefail
 
-# Elgato Camera Hub's output folder on this Mac. Verified 2026-08-16: the app
-# created this folder itself and no custom save-location is set in
-# ~/Library/Application Support/Elgato/Camera Hub/Settings.json.
-RECORDINGS_DIR="$HOME/Pictures/Camera Hub"
+# Where session recordings land on this Mac. ~/Pictures/Camera Hub is the
+# app's own output folder (verified 2026-08-16), but the first real session
+# ("Full Body Workout Session.mp4", 2026-08-17) appeared in ~/Downloads —
+# so both are scanned and the newest video wins.
+RECORDINGS_DIRS=("$HOME/Pictures/Camera Hub" "$HOME/Downloads")
 
 usage() { sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'; }
 
@@ -33,10 +34,9 @@ done
 command -v ffmpeg >/dev/null || { echo "ffmpeg not found — brew install ffmpeg" >&2; exit 1; }
 
 if [[ -z "$video" ]]; then
-  [[ -d "$RECORDINGS_DIR" ]] || { echo "recording folder not found: $RECORDINGS_DIR" >&2; exit 1; }
-  video=$(find "$RECORDINGS_DIR" -type f \( -iname '*.mp4' -o -iname '*.mov' -o -iname '*.mkv' \) -print0 \
+  video=$(find "${RECORDINGS_DIRS[@]}" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' -o -iname '*.mkv' \) -print0 2>/dev/null \
           | xargs -0 ls -t 2>/dev/null | head -n 1)
-  [[ -n "$video" ]] || { echo "no recordings in $RECORDINGS_DIR" >&2; exit 1; }
+  [[ -n "$video" ]] || { echo "no recordings in: ${RECORDINGS_DIRS[*]}" >&2; exit 1; }
 fi
 [[ -f "$video" ]] || { echo "not a file: $video" >&2; exit 1; }
 

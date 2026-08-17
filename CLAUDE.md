@@ -52,6 +52,18 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
 - **Progression:** double progression — hit the top of the rep range on all sets
   AND the last session didn't feel like "too much" → add 1.25 kg (or the harder
   variation).
+- **Volume ≠ reps, frequency ~neutral:** Pelland et al. 2025 dose-response
+  meta-regression (Sports Medicine) — weekly hard SETS drive hypertrophy with
+  diminishing returns; at equal volume, extra frequency adds ~nothing for
+  growth. So reach 10 sets via the set ramp, never by dropping rest days or
+  padding reps.
+- **Rest between sets:** Singer et al. 2024 Bayesian meta-analysis — ≥60 s
+  beats <60 s; beyond that differences are modest. Encoded: 90 s default,
+  60 s for core/carries (`rest` field), floor is 60 — don't go below.
+- **Stretching:** post-exercise stretching does NOT prevent DOMS (Afonso 2021
+  meta-analysis); consistent stretching DOES improve ROM/perceived stiffness
+  over weeks (Sports Med 2025 meta-regression). Hence the standalone evening
+  Stretch screen, honestly framed — never sell it as soreness prevention.
 
 ## Equipment inventory (all exercises must map to this)
 
@@ -72,8 +84,9 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
 
 ## How the app works (architecture)
 
-- **Screens:** home → warm-up → one exercise at a time → feel check-in → done.
-  Plus History and Guide, linked from home.
+- **Screens:** home → get-ready (setup checklist + warm-up) → one exercise at
+  a time → feel check-in → done. Plus History, Stretch (standalone evening
+  checklist), and Guide, linked from home.
 - **Data:** one JSON blob under storage key `gym-log-v2`:
   `{sessions:[{date:"YYYY-MM-DD", type:"A"|"B", feel:"easy"|"right"|"much",
   startedAt:ISO-string|null, entries:{exId:[{w:number|null, r:number,
@@ -98,19 +111,36 @@ Danny is a **novice** lifter. Rules that must survive every future edit:
 - **Session clock:** `cur.start` is set when Begin is tapped; every logged set
   stores `t`. The warm-up screen tells Danny to start the Camera Hub recording
   just before tapping Begin, so `t` ≈ video timestamp. This powers form checks.
-- **Rest timer:** 90 s, starts on set-tick, tap to dismiss.
+- **Rest timer:** per-exercise `rest` field (default 90 s, 60 s core/carries,
+  0 = no timer, e.g. bike intervals). Starts on set-tick, tap to dismiss.
+  Chimes via Web Audio at zero — the AudioContext is unlocked on set-tick
+  (user gesture); keep that or iOS silences it.
 - **How-to videos:** each exercise's fold-out shows "Quick demo" (`short`)
-  leading and "Full tutorial" (`vid`) muted beside it.
+  leading and "Full tutorial" (`vid`) muted beside it; both optional in
+  render (bike has none — not a new movement).
+- **Form tips:** each exercise may carry a `tip` — the latest form-check note,
+  rendered on the exercise screen. "process video" sessions rewrite these.
+- **Setup checklist** (`SETUP`): water, trainers (he lifted in socks once),
+  AirPods, camera recording + whole tower in frame, floor clear, Apple Watch
+  (placeholder until it arrives).
 - **CSV export:** `date,session,feel,exercise,set,weight_kg,reps,t_sec`.
 
 ## The training plan (encoded in the PLAN object)
 
-- Session A — Squat & Push: Goblet Squat, Dips, Overhead Press, Romanian
-  Deadlift, Knee Raise.
+- Session A — Squat & Push: Goblet Squat, Assisted Dips, Overhead Press,
+  Romanian Deadlift, Knee Raise (pads).
 - Session B — Pull & Hinge: Pull-Up, Bent-Over Row, Reverse Lunge, Floor Press,
   Suitcase Carry.
-- Schedule: Mon/Wed/Fri alternating A-B-A then B-A-B. Optional 4th day: spin
-  bike, 6 × (30 s hard / 90 s easy).
+- Session S — Saturday Extras (optional, light, no ramp): Suitcase Carry, Knee
+  Raise, Bike Intervals 4–6 × (30 s hard / 90 s easy). S reuses the same
+  exercise objects/ids as A/B, so edits and history stay in sync. The home
+  A/B alternation ignores S (`lastMain()`).
+- Progression chains set after the first form review (2026-08-17):
+  dips — box-assisted (two feet → one foot → toes → free; the band alone
+  wasn't enough); knee raise — pads first (he swung when hanging) → hanging →
+  ab-wheel rollouts.
+- Schedule: Mon/Wed/Fri alternating A-B-A then B-A-B; rest days are load-
+  bearing, don't program them away.
 
 ## Workflows
 
@@ -123,8 +153,9 @@ Danny records **one video per whole session** in Elgato Camera Hub, started just
 before he taps Begin in the app. When he says **"process video"** (or similar),
 do ALL of this without further questions:
 
-1. **Find the recording:** newest video file in Camera Hub's recording folder
-   (verified and hard-coded into `scripts/process-video.sh` at setup).
+1. **Find the recording:** newest video file across Camera Hub's recording
+   folder and `~/Downloads` (the first real session landed in Downloads, not
+   `~/Pictures/Camera Hub` — both are scanned by `scripts/process-video.sh`).
 2. **Locate the working sets.** Preferred path: if Danny pasted or attached a
    CSV export (or mentions set times), use `t_sec` — extract frames from `t-45s`
    to `t+10s` for the LAST set of each exercise (the money set: fatigue shows
@@ -150,6 +181,8 @@ do ALL of this without further questions:
 5. **Record it:** append to `form-notes.md` — date, exercises reviewed, the
    correction(s) given, one line each. Read existing notes first; if the same
    fault appears in 2+ sessions, open the critique with that recurring pattern.
+   Then update the affected exercises' `tip` fields in the PLAN object (and
+   clear tips that are fixed) so the next session shows the latest note.
 6. **Report** a short summary: per exercise, one line of praise + the fix.
    Offer to delete or archive the processed video.
 
